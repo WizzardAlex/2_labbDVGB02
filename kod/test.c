@@ -3,32 +3,17 @@
 #include<stdlib.h>
 #include<string.h>
 
-long convert_bin(int dec)
-{
-
-    int bin =0;
-    int rem,
-	i=1,
-	step=1;
-    while(dec!=0){
-	rem = dec%2;
-	dec/=2;
-	bin+=rem*i;
-	i*=10;
-    }
-    return bin;
-
-}
 
 
-long make_checksum(char* msg)
+
+long make_checksum(struct msg message)
 {
     int checksum=0;
     int i;
     char tmp;
-    for(i=0; i<sizeof(msg); i++){
+    for(i=0; i<sizeof(msg.data); i++){
 
-	tmp = msg[i];
+	tmp = msg.data[i];
 	checksum += (int)tmp;
 
 
@@ -36,7 +21,7 @@ long make_checksum(char* msg)
     return checksum;
 }
 
-int check_checksum(char* msg, int checksum)
+int check_checksum(struct msg message, int checksum)
 {
     int new_checksum = make_checksum(msg);
     if( new_checksum == checksum) return 1;
