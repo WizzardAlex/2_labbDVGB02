@@ -14,59 +14,76 @@ extern int A_state;
 extern int B_state;
 extern struct pkt *save_pk;
 
-int is_ACK(struct pkt *packet, int seqnum){
+int make_checksum(char *message){
+    int checksum = 0, i; 
+    char tmp;
+    for(i = 0; i < D_LEN; i++){
+        tmp = message[i];
+        checksum+= (int)tmp;
+    }
+    return checksum;
+}
+int check_checksum(char *message, int checksum){
+    int new_checksum = make_checksum(message);
+    if(new_checksum == checksum) return 1;
+    else    return 0;
+}
+
+int is_corrupt(struct pkt packet){
+    if(check_checksum(packet.payload, packet.checksum) ) return 1;
+    else return 0;
+}
+
+int is_ACK(struct pkt packet, int seqnum){
     // returns if 1 if the packets acknum matches seqnum
     // returns 0 if no match or packet is not ACK
-    if (packet->acknum == seqnum){ 
+    if (packet.acknum == seqnum){
         return 1;
     } else {
         return 0;
     }
 }
-int is_datapkt(struct pkt *packet, int seqnum){
+int is_data(struct pkt packet, int seqnum){
     // returns 1 if the packets seqnum matches seqnum
     // returns 0 if packet doesnt match
-    if (packet->seqnum == seqnum){ 
+    if (packet.seqnum == seqnum){
         return 1;
     } else {
         return 0;
     }
 }
-struct pkt *make_pkt(struct msg message, int acknum, int checksum, int seq){
+struct pkt make_pkt(struct msg message, int acknum, int checksum, int seq){
     struct pkt *packet = malloc(sizeof(struct pkt));
     packet->seqnum = seq;
     packet->acknum = acknum;
-    char *payload = malloc(sizeof(char)*D_LEN);
     strcpy(packet->payload, message.data);
     packet->checksum = checksum;
 
-    return packet;
+    return *packet;
 }
-struct pkt *make_ACK(int acknum){
+struct pkt make_ACK(int acknum){
     struct pkt *packet = malloc(sizeof(struct pkt));
     packet->acknum = acknum;
     packet->seqnum = NOSEQ;
     packet->checksum = NOCHK;
-    return packet;
+    return *packet;
 }
-void freepkt(struct pkt *packet){
+void free_pkt(struct pkt *packet){
     free(packet->payload);
     free(packet);
     return;
 }
 
-int is_corrupt(struct pkt packet);
-
 /* called from layer 5, passed the data to be sent to other side */
 void A_output( struct msg message){
     int checksum;
-    struct pkt *packet;
+    struct pkt packet;
     switch(A_state){
         case 0:
-            checksum = mck_checksum(message);
+            checksum = make_checksum(message.data);
             packet = make_pkt(message, NOACK, checksum, 0);
-            tolayer3(B_SIDE, *packet);
-            save_pk = packet;
+            tolayer3(B_SIDE, packet);
+            save_pk = &packet;
             starttimer(A_SIDE, WAIT_T);
             A_state = 1;
             break;
@@ -74,10 +91,10 @@ void A_output( struct msg message){
             // awaiting ACK for latest package, do nothing
             break;
         case 2:
-            checksum = mck_checksum(message);
+            checksum = make_checksum(message.data);
             packet = make_pkt(message, NOACK, checksum, 1);
-            tolayer3(B_SIDE, *packet);
-            save_pk = packet;
+            tolayer3(B_SIDE, packet);
+            save_pk = &packet;
             starttimer(A_SIDE, WAIT_T);
             A_state = 3;
             break;
@@ -96,7 +113,7 @@ void A_input(struct pkt packet){
             //not awaiting any ACK, do nothing
             break;
         case 1:
-            if (!(is_corrupt(packet)) && is_ACK(&packet, 0) ){
+            if (!(is_corrupt(packet)) && is_ACK(packet, 0) ){
                 // ACK received
                 stoptimer(A_SIDE);
                 free_pkt(save_pk);
@@ -107,7 +124,7 @@ void A_input(struct pkt packet){
             //not awaiting any ACK, do nothing
             break;
         case 3:
-            if (!(is_corrupt(packet)) && is_ACK(&packet, 1) ){
+            if (!(is_corrupt(packet)) && is_ACK(packet, 1) ){
                 // ACK received
                 stoptimer(A_SIDE);
                 free_pkt(save_pk);
@@ -136,7 +153,6 @@ void A_timerinterrupt(){
     }
 }
 
-
 /* the following routine will be called once (only) before any other */
 /* entity A routines are called. You can use it to do any initialization */
 void A_init(){
@@ -148,22 +164,23 @@ void A_init(){
 
 /* called from layer 3, when a packet arrives for layer 4 at B*/
 void B_input(struct pkt packet){
+    struct pkt send_pkt;
     switch(B_state){
         case 0:
-            if (is_corrupt(packet) || is_datapkt(&packet, 1)){
-               // do nothin 
-            } else if (!(is_corrupt(packet)) && is_datapkt(&packet, 0)){
-                make_ACK(0);
-                tolayer3(B_SIDE, packet);
+            if (is_corrupt(packet) || is_data(packet, 1)){
+               // do nothin
+            } else if (!(is_corrupt(packet)) && is_data(packet, 0)){
+                send_pkt = make_ACK(0);
+                tolayer3(B_SIDE, send_pkt);
             }
             B_state = 1;
             break;
         case 1:
-            if (is_corrupt(packet) || is_datapkt(&packet, 0)){
-               // do nothin 
-            } else if (!(is_corrupt(packet)) && is_datapkt(&packet, 1)){
-                make_ACK(1);
-                tolayer3(B_SIDE, packet);
+            if (is_corrupt(packet) || is_data(packet, 0)){
+               // do nothin
+            } else if (!(is_corrupt(packet)) && is_data(packet, 1)){
+                send_pkt=make_ACK(1);
+                tolayer3(B_SIDE, send_pkt);
             }
             B_state = 0;
             break;
