@@ -14,23 +14,25 @@
 int A_state;
 int B_state;
 struct pkt *save_pk;
-int make_checksum(char *message){
+int make_checksum(struct pkt packet){
     int checksum = 0, i;
     char tmp;
     for(i = 0; i < D_LEN; i++){
-        tmp = message[i];
+        tmp = packet.payload[i];
         checksum+= (int)tmp;
     }
+    checksum += packet.seqnum;
+    checksum += packet.acknum;
     return checksum;
 }
-int check_checksum(char *message, int checksum){
-    int new_checksum = make_checksum(message);
-    if(new_checksum == checksum) return 1;
+int check_checksum(struct pkt packet){
+    int new_checksum = make_checksum(packet);
+    if(new_checksum == packet.checksum) return 1;
     else    return 0;
 }
 
 int is_corrupt(struct pkt packet){
-    if(check_checksum(packet.payload, packet.checksum) ) return 0;
+    if(check_checksum(packet) ) return 0;
     else return 1;
 }
 
@@ -89,7 +91,7 @@ void A_output( struct msg message){
     printf("A:got message! %s\n", message.data);
     switch(A_state){
         case 0:
-            checksum = make_checksum(message.data);
+            checksum = make_checksum(packet);
             packet = make_pkt(message, NOACK, checksum, 0);
             copy_pkt(&packet, save_pk);
             tolayer3(A_SIDE, packet);
@@ -101,7 +103,7 @@ void A_output( struct msg message){
             // awaiting ACK for latest package, do nothing
             break;
         case 2:
-            checksum = make_checksum(message.data);
+            checksum = make_checksum(packet);
             packet = make_pkt(message, NOACK, checksum, 1);
             copy_pkt(&packet, save_pk);
             tolayer3(A_SIDE, packet);
@@ -133,7 +135,7 @@ void A_input(struct pkt packet){
                 A_state = 2;
             } else {
                 puts("NOT");
-                printf("res are %d and %d\n", is_corrupt(packet), is_ACK(packet, 0)); 
+                printf("res are %d and %d\n", is_corrupt(packet), is_ACK(packet, 0));
             }
             break;
         case 2:
