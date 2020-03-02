@@ -64,9 +64,7 @@ struct pkt make_pkt(struct msg message, int acknum, int checksum, int seq){
 void copy_pkt(struct pkt *source, struct pkt *dest){
     dest->seqnum = source->seqnum;
     dest->acknum = source->acknum;
-    puts("crsch");
     strncpy(dest->payload, source->payload, D_LEN);
-    puts("cdadsrsch");
     dest->checksum = source->checksum;
 
     return ;
@@ -75,7 +73,7 @@ struct pkt make_ACK(int acknum){
     struct pkt *packet = malloc(sizeof(struct pkt));
     packet->acknum = acknum;
     packet->seqnum = NOSEQ;
-    packet->checksum = NOCHK;
+    packet->checksum = make_checksum(packet);
     return *packet;
 }
 void free_pkt(struct pkt *packet){
@@ -93,9 +91,7 @@ void A_output( struct msg message){
         case 0:
             checksum = make_checksum(message.data);
             packet = make_pkt(message, NOACK, checksum, 0);
-            puts("a");
             copy_pkt(&packet, save_pk);
-            puts("b");
             tolayer3(A_SIDE, packet);
             starttimer(A_SIDE, WAIT_T);
             A_state = 1;
@@ -123,7 +119,7 @@ void B_output(struct msg message)  /* need be completed only for extra credit */
 
 /* called from layer 3, when a packet arrives for layer 4 */
 void A_input(struct pkt packet){
-    printf("A: Got packet! seq: %d, ack %d, pay: %s\n", packet.seqnum, packet.acknum, packet.payload);
+    printf("A: Got packet! seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
     switch(A_state){
         case 0:
             //not awaiting any ACK, do nothing
@@ -135,6 +131,9 @@ void A_input(struct pkt packet){
                 stoptimer(A_SIDE);
                 free_pkt(save_pk);
                 A_state = 2;
+            } else {
+                puts("NOT");
+                printf("res are %d and %d\n", is_corrupt(packet), is_ACK(packet, 0)); 
             }
             break;
         case 2:
@@ -176,6 +175,7 @@ void A_timerinterrupt(){
 /* the following routine will be called once (only) before any other */
 /* entity A routines are called. You can use it to do any initialization */
 void A_init(){
+    save_pk = malloc(sizeof(struct pkt));
     A_state = 0;
 }
 
