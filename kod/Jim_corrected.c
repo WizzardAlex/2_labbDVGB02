@@ -14,7 +14,7 @@ the emulator, you're welcome to look at the code - but again, you should have
 to, and you defeinitely should not have to modify
 ******************************************************************/
 
-#include "Stud.h"
+#include "studen.h"
 
 struct event {
     float evtime;       /* event time */

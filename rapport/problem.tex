@@ -1,2 +1,3 @@
 \section{Problem}
 För att implementera tillstånden från grafen används globala variabler då vi inte kan förändra API:n till funkionerna till att ta emot tillståndet som parameter.
+Samma lösning användes för återsänding av paket. För att kunna återsända paket efter timeravbrott skapades en global pekare till det senaste sända paketet för att spara det.

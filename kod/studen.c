@@ -1,6 +1,6 @@
 /********* STUDENTS WRITE THE NEXT SEVEN ROUTINES *********/
 
-#include "Stud.h"
+#include "studen.h"
 #include <string.h>
 #include <stdlib.h>
 #define D_LEN 20
