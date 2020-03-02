@@ -10,12 +10,12 @@
 #define A_SIDE 0
 #define B_SIDE 1
 #define WAIT_T 8
-extern int A_state;
-extern int B_state;
-extern struct pkt *save_pk;
 
+int A_state;
+int B_state;
+struct pkt *save_pk;
 int make_checksum(char *message){
-    int checksum = 0, i; 
+    int checksum = 0, i;
     char tmp;
     for(i = 0; i < D_LEN; i++){
         tmp = message[i];
