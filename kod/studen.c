@@ -75,7 +75,7 @@ struct pkt make_ACK(int acknum){
     struct pkt *packet = malloc(sizeof(struct pkt));
     packet->acknum = acknum;
     packet->seqnum = NOSEQ;
-    packet->checksum = make_checksum(packet);
+    packet->checksum = make_checksum(*packet);
     return *packet;
 }
 void free_pkt(struct pkt *packet){
@@ -94,10 +94,10 @@ void A_output( struct msg message){
             checksum = make_checksum(packet);
             packet = make_pkt(message, NOACK, checksum, 0);
             copy_pkt(&packet, save_pk);
+	    printf("A: sending packet seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
             tolayer3(A_SIDE, packet);
             starttimer(A_SIDE, WAIT_T);
             A_state = 1;
-            printf("A: Sending packet seq: %d, ack %d, pay: %s\n", packet.seqnum, packet.acknum, packet.payload);
             break;
         case 1:
             // awaiting ACK for latest package, do nothing
@@ -106,10 +106,10 @@ void A_output( struct msg message){
             checksum = make_checksum(packet);
             packet = make_pkt(message, NOACK, checksum, 1);
             copy_pkt(&packet, save_pk);
+	    printf("A: sending packet seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
             tolayer3(A_SIDE, packet);
             starttimer(A_SIDE, WAIT_T);
-            A_state = 3;
-            printf("A: Sending packet seq: %d, ack %d, pay: %s\n", packet.seqnum, packet.acknum, packet.payload);
+	    A_state = 3;
             break;
         case 3:
             // awaiting ACK for latest package, do nothing
@@ -187,7 +187,7 @@ void A_init(){
 /* called from layer 3, when a packet arrives for layer 4 at B*/
 void B_input(struct pkt packet){
     struct pkt send_pkt;
-    printf("B: Got packet! seq: %d, ack %d, pay: %s\n", packet.seqnum, packet.acknum, packet.payload);
+    printf("B: got packet seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
     switch(B_state){
         case 0:
             if (is_corrupt(packet) || is_data(packet, 1)){
