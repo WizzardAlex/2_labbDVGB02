@@ -17,13 +17,15 @@ struct pkt *save_pk;
 u_int16_t make_checksum(struct pkt packet){
     u_int16_t checksum = 0, i=0;
     char tmp;
+    printf("checksum: packet seq: %d\n",packet.seqnum);
     if(strlen(packet.payload)>0){
 	for(i = 0; i < D_LEN; i++){
 	    tmp = packet.payload[i];
 	    checksum+= (int)tmp;
 	}
-    }
+
     checksum += packet.seqnum;
+    }
     checksum += packet.acknum;
     printf("make_checksum payload: %s sum:%d\n",packet.payload,checksum);
     return checksum;
@@ -77,7 +79,7 @@ struct pkt make_ACK(int acknum){
     struct pkt *packet = malloc(sizeof(struct pkt));
     packet->acknum = acknum;
     packet->seqnum = NOSEQ;
-    packet->checksum = acknum+NOSEQ; // fix
+    packet->checksum = acknum; // fix
     return *packet;
 }
 void free_pkt(struct pkt *packet){
@@ -135,7 +137,11 @@ void A_input(struct pkt packet){
                 puts("Received ACK for 0");
                 // ACK received
                 stoptimer(A_SIDE);
-                free_pkt(save_pk);
+		puts("Before free_pkt(save_pk)");
+
+		printf("B_output()  save_pk pointer: %p\n",save_pk);
+                //free_pkt(save_pk);
+		puts("After free_pkt(save_pk)");
                 A_state = 2;
             } else {
                 puts("NOT");
@@ -150,7 +156,7 @@ void A_input(struct pkt packet){
                 puts("Received ACK for 1");
                 // ACK received
                 stoptimer(A_SIDE);
-                free_pkt(save_pk);
+                //free_pkt(save_pk);
                 A_state = 0;
             }
             break;
@@ -182,6 +188,7 @@ void A_timerinterrupt(){
 /* entity A routines are called. You can use it to do any initialization */
 void A_init(){
     save_pk = malloc(sizeof(struct pkt));
+    printf("A_init() save_pk pointer: %p\n",save_pk);
     A_state = 0;
 }
 
