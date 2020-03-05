@@ -17,9 +17,11 @@ struct pkt *save_pk;
 u_int16_t make_checksum(struct pkt packet){
     u_int16_t checksum = 0, i=0;
     char tmp;
-    for(i = 0; i < D_LEN; i++){
-        tmp = packet.payload[i];
-        checksum+= (int)tmp;
+    if(strlen(packet.payload)>0){
+	for(i = 0; i < D_LEN; i++){
+	    tmp = packet.payload[i];
+	    checksum+= (int)tmp;
+	}
     }
     checksum += packet.seqnum;
     checksum += packet.acknum;
