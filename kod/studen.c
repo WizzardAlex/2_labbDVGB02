@@ -14,8 +14,8 @@
 int A_state;
 int B_state;
 struct pkt *save_pk;
-int make_checksum(struct pkt packet){
-    int checksum = 0, i;
+u_int16_t make_checksum(struct pkt packet){
+    u_int16_t checksum = 0, i=0;
     char tmp;
     for(i = 0; i < D_LEN; i++){
         tmp = packet.payload[i];
@@ -23,17 +23,17 @@ int make_checksum(struct pkt packet){
     }
     checksum += packet.seqnum;
     checksum += packet.acknum;
+    printf("make_checksum payload: %s sum:%d\n",packet.payload,checksum);
     return checksum;
 }
-int check_checksum(struct pkt packet){
-    int new_checksum = make_checksum(packet);
-    if(new_checksum == packet.checksum) return 1;
-    else    return 0;
-}
+
 
 int is_corrupt(struct pkt packet){
-    if(check_checksum(packet) ) return 0;
-    else return 1;
+    u_int16_t new_checksum = make_checksum(packet);
+    printf("is_corrupt() values: seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
+    printf("new_checksum: %d\n",new_checksum);
+    if(new_checksum != packet.checksum) return 1;
+    else return 0;
 }
 
 int is_ACK(struct pkt packet, int seqnum){
@@ -75,7 +75,7 @@ struct pkt make_ACK(int acknum){
     struct pkt *packet = malloc(sizeof(struct pkt));
     packet->acknum = acknum;
     packet->seqnum = NOSEQ;
-    packet->checksum = make_checksum(*packet);
+    packet->checksum = acknum+NOSEQ; // fix
     return *packet;
 }
 void free_pkt(struct pkt *packet){
@@ -91,8 +91,9 @@ void A_output( struct msg message){
     printf("A:got message! %s\n", message.data);
     switch(A_state){
         case 0:
-            checksum = make_checksum(packet);
+	    checksum = 0;
             packet = make_pkt(message, NOACK, checksum, 0);
+            packet.checksum = make_checksum(packet);
             copy_pkt(&packet, save_pk);
 	    printf("A: sending packet seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
             tolayer3(A_SIDE, packet);
@@ -103,8 +104,9 @@ void A_output( struct msg message){
             // awaiting ACK for latest package, do nothing
             break;
         case 2:
-            checksum = make_checksum(packet);
+	    checksum = 0;
             packet = make_pkt(message, NOACK, checksum, 1);
+            packet.checksum = make_checksum(packet);
             copy_pkt(&packet, save_pk);
 	    printf("A: sending packet seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
             tolayer3(A_SIDE, packet);
@@ -192,7 +194,7 @@ void B_input(struct pkt packet){
         case 0:
             if (is_corrupt(packet) || is_data(packet, 1)){
                // do nothin
-                puts("B: CORRUPT OR WRONG ORDER");
+                printf("B: CORRUPT OR WRONG ORDER, is_corrupt: %d is_data: %d\n",is_corrupt(packet),is_data(packet,1));
             } else if (!(is_corrupt(packet)) && is_data(packet, 0)){
                 send_pkt = make_ACK(0);
                 puts("B: sending ACK 0");
