@@ -9,7 +9,7 @@
 #define NOCHK -1
 #define A_SIDE 0
 #define B_SIDE 1
-#define WAIT_T 50
+#define WAIT_T 30
 
 int A_state;
 int B_state;
@@ -75,7 +75,8 @@ struct pkt make_ACK(int acknum){
     struct pkt *packet = malloc(sizeof(struct pkt));
     packet->acknum = acknum;
     packet->seqnum = NOSEQ;
-    packet->checksum = acknum; // fix
+    strcpy(packet->payload, "");
+    packet->checksum = make_checksum( *packet);
     return *packet;
 }
 void free_pkt(struct pkt *packet){
@@ -202,6 +203,9 @@ void B_input(struct pkt packet){
             if (is_corrupt(packet) || is_data(packet, 1)){
                // do nothin
                 printf("\nB: CORRUPT OR WRONG ORDER, is_corrupt: %d is_data: %d\n",is_corrupt(packet),is_data(packet,1));
+                send_pkt = make_ACK(1);
+                puts("B: sending ACK 1");
+                tolayer3(B_SIDE, send_pkt);
             } else if (!(is_corrupt(packet)) && is_data(packet, 0)){
                 send_pkt = make_ACK(0);
                 puts("B: sending ACK 0");
@@ -212,6 +216,9 @@ void B_input(struct pkt packet){
         case 1:
             if (is_corrupt(packet) || is_data(packet, 0)){
                 puts("\nB: CORRUPT OR WRONG ORDER");
+                send_pkt = make_ACK(0);
+                puts("B: sending ACK 0");
+                tolayer3(B_SIDE, send_pkt);
                // do nothin
             } else if (!(is_corrupt(packet)) && is_data(packet, 1)){
                 puts("\nB: sending ACK 1");
