@@ -92,14 +92,14 @@ void free_pkt(struct pkt *packet){
 void A_output( struct msg message){
     int checksum;
     struct pkt packet;
-    printf("A:got message! %s\n", message.data);
+    printf("\nA:got message! %s\n", message.data);
     switch(A_state){
         case 0:
 	    checksum = 0;
             packet = make_pkt(message, NOACK, checksum, 0);
             packet.checksum = make_checksum(packet);
             copy_pkt(&packet, save_pk);
-	    printf("A: sending packet seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
+	    printf("\nA: sending packet seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
             tolayer3(A_SIDE, packet);
             starttimer(A_SIDE, WAIT_T);
             A_state = 1;
@@ -112,7 +112,7 @@ void A_output( struct msg message){
             packet = make_pkt(message, NOACK, checksum, 1);
             packet.checksum = make_checksum(packet);
             copy_pkt(&packet, save_pk);
-	    printf("A: sending packet seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
+	    printf("\nA: sending packet seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
             tolayer3(A_SIDE, packet);
             starttimer(A_SIDE, WAIT_T);
 	    A_state = 3;
@@ -127,14 +127,14 @@ void B_output(struct msg message)  /* need be completed only for extra credit */
 
 /* called from layer 3, when a packet arrives for layer 4 */
 void A_input(struct pkt packet){
-    printf("A: Got packet! seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
+    printf("\nA: Got packet! seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
     switch(A_state){
         case 0:
             //not awaiting any ACK, do nothing
             break;
         case 1:
             if (!(is_corrupt(packet)) && is_ACK(packet, 0) ){
-                puts("Received ACK for 0");
+                puts("\nA: Received ACK for 0");
                 // ACK received
                 stoptimer(A_SIDE);
 		puts("Before free_pkt(save_pk)");
@@ -153,7 +153,7 @@ void A_input(struct pkt packet){
             break;
         case 3:
             if (!(is_corrupt(packet)) && is_ACK(packet, 1) ){
-                puts("Received ACK for 1");
+                puts("\nA: Received ACK for 1");
                 // ACK received
                 stoptimer(A_SIDE);
                 //free_pkt(save_pk);
@@ -170,14 +170,14 @@ void A_timerinterrupt(){
         case 0:
             break;
         case 1:
-            printf("A: Resending packet seq: %d, ack %d, pay: %s\n", save_pk->seqnum, save_pk->acknum, save_pk->payload);
+            printf("\nA: Resending packet seq: %d, ack %d, pay: %s\n", save_pk->seqnum, save_pk->acknum, save_pk->payload);
             tolayer3(A_SIDE, *save_pk);
             starttimer(A_SIDE, WAIT_T);
             break;
         case 2:
             break;
         case 3:
-            printf("A: Resending packet seq: %d, ack %d, pay: %s\n", save_pk->seqnum, save_pk->acknum, save_pk->payload);
+            printf("\nA: Resending packet seq: %d, ack %d, pay: %s\n", save_pk->seqnum, save_pk->acknum, save_pk->payload);
             tolayer3(A_SIDE, *save_pk);
             starttimer(A_SIDE, WAIT_T);
             break;
@@ -198,12 +198,12 @@ void A_init(){
 /* called from layer 3, when a packet arrives for layer 4 at B*/
 void B_input(struct pkt packet){
     struct pkt send_pkt;
-    printf("B: got packet seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
+    printf("\nB: got packet seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
     switch(B_state){
         case 0:
             if (is_corrupt(packet) || is_data(packet, 1)){
                // do nothin
-                printf("B: CORRUPT OR WRONG ORDER, is_corrupt: %d is_data: %d\n",is_corrupt(packet),is_data(packet,1));
+                printf("\nB: CORRUPT OR WRONG ORDER, is_corrupt: %d is_data: %d\n",is_corrupt(packet),is_data(packet,1));
             } else if (!(is_corrupt(packet)) && is_data(packet, 0)){
                 send_pkt = make_ACK(0);
                 puts("B: sending ACK 0");
@@ -213,10 +213,10 @@ void B_input(struct pkt packet){
             break;
         case 1:
             if (is_corrupt(packet) || is_data(packet, 0)){
-                puts("B: CORRUPT OR WRONG ORDER");
+                puts("\nB: CORRUPT OR WRONG ORDER");
                // do nothin
             } else if (!(is_corrupt(packet)) && is_data(packet, 1)){
-                puts("B: sending ACK 1");
+                puts("\nB: sending ACK 1");
                 send_pkt=make_ACK(1);
                 tolayer3(B_SIDE, send_pkt);
             }
