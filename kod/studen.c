@@ -9,7 +9,7 @@
 #define NOCHK -1
 #define A_SIDE 0
 #define B_SIDE 1
-#define WAIT_T 8
+#define WAIT_T 50
 
 int A_state;
 int B_state;
@@ -17,7 +17,7 @@ struct pkt *save_pk;
 u_int16_t make_checksum(struct pkt packet){
     u_int16_t checksum = 0, i=0;
     char tmp;
-    printf("checksum: packet seq: %d\n",packet.seqnum);
+    //printf("checksum: packet seq: %d\n",packet.seqnum);
     if(strlen(packet.payload)>0){
 	for(i = 0; i < D_LEN; i++){
 	    tmp = packet.payload[i];
@@ -27,15 +27,15 @@ u_int16_t make_checksum(struct pkt packet){
     checksum += packet.seqnum;
     }
     checksum += packet.acknum;
-    printf("make_checksum payload: %s sum:%d\n",packet.payload,checksum);
+    //printf("make_checksum payload: %s sum:%d\n",packet.payload,checksum);
     return checksum;
 }
 
 
 int is_corrupt(struct pkt packet){
     u_int16_t new_checksum = make_checksum(packet);
-    printf("is_corrupt() values: seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
-    printf("new_checksum: %d\n",new_checksum);
+    //printf("is_corrupt() values: seq: %d, ack %d, pay: %s chk: %d\n", packet.seqnum, packet.acknum, packet.payload, packet.checksum);
+    //printf("new_checksum: %d\n",new_checksum);
     if(new_checksum != packet.checksum) return 1;
     else return 0;
 }
@@ -43,11 +43,7 @@ int is_corrupt(struct pkt packet){
 int is_ACK(struct pkt packet, int seqnum){
     // returns if 1 if the packets acknum matches seqnum
     // returns 0 if no match or packet is not ACK
-    if (packet.acknum == seqnum){
-        return 1;
-    } else {
-        return 0;
-    }
+    return (packet.acknum == seqnum);
 }
 int is_data(struct pkt packet, int seqnum){
     // returns 1 if the packets seqnum matches seqnum
@@ -92,7 +88,7 @@ void free_pkt(struct pkt *packet){
 void A_output( struct msg message){
     int checksum;
     struct pkt packet;
-    printf("\nA:got message! %s\n", message.data);
+    printf("\nA:got message to send! %s\n", message.data);
     switch(A_state){
         case 0:
 	    checksum = 0;
@@ -105,6 +101,7 @@ void A_output( struct msg message){
             A_state = 1;
             break;
         case 1:
+            puts("Skipping");
             // awaiting ACK for latest package, do nothing
             break;
         case 2:
@@ -118,6 +115,7 @@ void A_output( struct msg message){
 	    A_state = 3;
             break;
         case 3:
+            puts("Skipping");
             // awaiting ACK for latest package, do nothing
             break;
     }
@@ -137,14 +135,14 @@ void A_input(struct pkt packet){
                 puts("\nA: Received ACK for 0");
                 // ACK received
                 stoptimer(A_SIDE);
-		puts("Before free_pkt(save_pk)");
+		//puts("Before free_pkt(save_pk)");
 
-		printf("B_output()  save_pk pointer: %p\n",save_pk);
+		//printf("B_output()  save_pk pointer: %p\n",save_pk);
                 //free_pkt(save_pk);
-		puts("After free_pkt(save_pk)");
+		//puts("After free_pkt(save_pk)");
                 A_state = 2;
             } else {
-                puts("NOT");
+                puts("IS CORRUPT OR NOT FIT ACK");
                 printf("res are %d and %d\n", is_corrupt(packet), is_ACK(packet, 0));
             }
             break;
@@ -188,7 +186,7 @@ void A_timerinterrupt(){
 /* entity A routines are called. You can use it to do any initialization */
 void A_init(){
     save_pk = malloc(sizeof(struct pkt));
-    printf("A_init() save_pk pointer: %p\n",save_pk);
+    //printf("A_init() save_pk pointer: %p\n",save_pk);
     A_state = 0;
 }
 
