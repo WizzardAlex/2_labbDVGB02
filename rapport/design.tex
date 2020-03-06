@@ -1,0 +1,3 @@
+\section{Design}
+För att skapa ett pålitligt transsportprotokoll för att överföra data används en kombination av checksum, ACK med bytande bit, och timer. Varje paket tilldelas en checksum som används för att se ifall paketet har blivit korrumperat på vägen. För att hålla koll på vilket paket man skickar eller väntar på har varje paket med data ett sekvensnummer som byter mellan 0 och 1. Efter att paketet har skickats väntar man tills man får ett ACK med samma nummer som sekvensnummret. Om ett mottagaren skickar alltid en ACK som svar till det paket den får med samma ACK som paketets sekvensnummer. 
+Efter att en specifierad tid har gått utan att man har fått ett ACK aktiveras ett timeravbrott och paketet skickas igen.
