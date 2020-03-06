@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.11.29)  6 MAR 2020 16:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.11.29)  6 MAR 2020 16:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -548,43 +548,48 @@ Overfull \hbox (10.47272pt too wide) in paragraph at lines 31--31
 []\T1/cmr/m/n/12 florean.alexander@gmail.com  
  []
 
+
+Overfull \hbox (10.99481pt too wide) in paragraph at lines 33--33
+[]\T1/cmr/m/n/12 emansven100@student.kau.se  
+ []
+
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 33.
+(Font)              <7> on input line 35.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 33.
+(Font)              <5> on input line 35.
 <bilder/kau.jpg, id=1, 401.5pt x 401.5pt>
 File: bilder/kau.jpg Graphic file (type jpg)
 <use bilder/kau.jpg>
-Package pdftex.def Info: bilder/kau.jpg  used on input line 57.
+Package pdftex.def Info: bilder/kau.jpg  used on input line 59.
 (pdftex.def)             Requested size: 172.5pt x 172.50072pt.
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./bilder/kau.jpg>])
-(./problem.tex) (./design.tex) [1] (./samling.toc)
+(./problem.tex) (./design.tex) (./implementation.tex) [1] (./samling.toc)
 \tf@toc=\write3
 \openout3 = `samling.toc'.
 
- [2] (./referenser.tex)
-[3] (./samling.aux) ) 
+
+[2] (./referenser.tex) [3] (./samling.aux) ) 
 Here is how much of TeX's memory you used:
- 3711 strings out of 492982
- 53384 string characters out of 6134895
- 119093 words of memory out of 5000000
- 7221 multiletter control sequences out of 15000+600000
+ 3713 strings out of 492982
+ 53428 string characters out of 6134895
+ 120089 words of memory out of 5000000
+ 7220 multiletter control sequences out of 15000+600000
  13779 words of font info for 28 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,4n,38p,647b,257s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc
-}</usr/share/texmf/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/texmf/f
-onts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm
--super/sfbx2074.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc0900.pfb>
-</usr/share/texmf/fonts/type1/public/cm-super/sfcc1200.pfb></usr/share/texmf/fo
-nts/type1/public/cm-super/sfcc1440.pfb></usr/share/texmf/fonts/type1/public/cm-
-super/sfcc1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb><
-/usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fon
-ts/type1/public/cm-super/sfti1000.pfb></usr/share/texmf/fonts/type1/public/cm-s
-uper/sfti1200.pfb>
-Output written on samling.pdf (4 pages, 186635 bytes).
+{/usr/share/texmf/fonts/enc/dvips/c
+m-super/cm-super-t1.enc}</usr/share/texmf/fonts/type1/public/cm-super/sfbx1000.
+pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texm
+f/fonts/type1/public/cm-super/sfbx2074.pfb></usr/share/texmf/fonts/type1/public
+/cm-super/sfcc0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1200.p
+fb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1440.pfb></usr/share/texmf
+/fonts/type1/public/cm-super/sfcc1728.pfb></usr/share/texmf/fonts/type1/public/
+cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pf
+b></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb></usr/share/texmf/
+fonts/type1/public/cm-super/sfti1200.pfb>
+Output written on samling.pdf (4 pages, 190775 bytes).
 PDF statistics:
  63 PDF objects out of 1000 (max. 8388607)
  44 compressed objects within 1 object stream
