@@ -138,9 +138,6 @@ void A_input(struct pkt packet){
                 stoptimer(A_SIDE);
 		//puts("Before free_pkt(save_pk)");
 
-		//printf("B_output()  save_pk pointer: %p\n",save_pk);
-                //free_pkt(save_pk);
-		//puts("After free_pkt(save_pk)");
                 A_state = 2;
             } else {
                 puts("IS CORRUPT OR NOT FIT ACK");
