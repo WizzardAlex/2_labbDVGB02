@@ -1,5 +1,8 @@
 \section{Implementation}
 \subsection{Checksum}
-Checksum implementerades genom att skapa ett 16-bit tal som har summan av sekvensnumret, acknumret och varje char i paketets payload. För att kolla efter korruption i ett paket skapas en ny checksum av dess innehåll och jämförs med det paketet kom med. Om checksumen inte stämmer är det korrumperat. 
+Checksum implementerades genom att skapa ett 16-bit tal som har summan av sekvensnumret, acknumret
+och varje char i paketets payload i ascii kod. För att kolla efter korruption i ett paket skapas en
+ny checksum av dess innehåll därefter jämförs den nya med det checksum som kom  med paketet. Om
+checksumen inte stämmer är det korrupterat. 
 \subsection{Timer}
 Timer var redan implementerad i simulatorn och det behövdes endast kodas in beteende vid avbrott. Macrot WAIT\_T reglerar hur länge timern väntar och bestämdes genom prövning av flertal värden tills ett optimalt värde fanns.
