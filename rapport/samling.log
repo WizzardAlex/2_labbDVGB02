@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.11.29)  9 MAR 2020 15:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.11.29)  9 MAR 2020 15:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -571,7 +571,7 @@ Package pdftex.def Info: bilder/kau.jpg  used on input line 59.
 
  [1] (./inledning.tex) (./problem.tex) (./design.tex)
 (./implementation.tex [2]) (./sammanfattning.tex) (./bilagor.tex
-<bilder/sender.jpg, id=22, 1084.05pt x 1628.0825pt>
+<bilder/sender.jpg, id=23, 1084.05pt x 1628.0825pt>
 File: bilder/sender.jpg Graphic file (type jpg)
 <use bilder/sender.jpg>
 Package pdftex.def Info: bilder/sender.jpg  used on input line 3.
@@ -591,7 +591,7 @@ File: bilder/sender.jpg Graphic file (type jpg)
 Package pdftex.def Info: bilder/sender.jpg  used on input line 9.
 (pdftex.def)             Requested size: 345.0pt x 518.14017pt.
  [5]
-<bilder/receiver.jpg, id=33, 1412.27625pt x 2990.17125pt>
+<bilder/receiver.jpg, id=34, 1412.27625pt x 2990.17125pt>
 File: bilder/receiver.jpg Graphic file (type jpg)
 <use bilder/receiver.jpg>
 Package pdftex.def Info: bilder/receiver.jpg  used on input line 15.
@@ -600,32 +600,30 @@ Package pdftex.def Info: bilder/receiver.jpg  used on input line 15.
 Overfull \vbox (180.43114pt too high) has occurred while \output is active []
 
 
-[7 <./bilder/receiver.jpg>]) (./referenser.tex) [8] (./samling.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+[7 <./bilder/receiver.jpg>]) (./referenser.tex) [8] (./samling.aux) ) 
 Here is how much of TeX's memory you used:
- 3738 strings out of 492982
- 53841 string characters out of 6134895
- 121131 words of memory out of 5000000
- 7234 multiletter control sequences out of 15000+600000
- 13779 words of font info for 28 fonts, out of 8000000 for 9000
+ 3740 strings out of 492982
+ 53863 string characters out of 6134895
+ 122113 words of memory out of 5000000
+ 7235 multiletter control sequences out of 15000+600000
+ 14555 words of font info for 29 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,5n,39p,647b,302s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf/
-fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/c
-m-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx2074.pfb
-></usr/share/texmf/fonts/type1/public/cm-super/sfcc0900.pfb></usr/share/texmf/f
-onts/type1/public/cm-super/sfcc1200.pfb></usr/share/texmf/fonts/type1/public/cm
--super/sfcc1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1728.pfb>
-</usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fo
-nts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-
-super/sfti1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb>
-Output written on samling.pdf (9 pages, 1051982 bytes).
+{/usr/shar
+e/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf/fonts/type1/
+public/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx
+1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share
+/texmf/fonts/type1/public/cm-super/sfbx2074.pfb></usr/share/texmf/fonts/type1/p
+ublic/cm-super/sfcc0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1
+200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc1440.pfb></usr/share/
+texmf/fonts/type1/public/cm-super/sfcc1728.pfb></usr/share/texmf/fonts/type1/pu
+blic/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm12
+00.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb></usr/share/t
+exmf/fonts/type1/public/cm-super/sfti1200.pfb>
+Output written on samling.pdf (9 pages, 1069706 bytes).
 PDF statistics:
- 82 PDF objects out of 1000 (max. 8388607)
- 56 compressed objects within 1 object stream
+ 86 PDF objects out of 1000 (max. 8388607)
+ 59 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
